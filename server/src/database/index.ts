@@ -10,3 +10,7 @@ export class LocalDatabase {
         this.entries = []
     }
 }
+
+const localDatabase = new LocalDatabase()
+
+export default localDatabase
