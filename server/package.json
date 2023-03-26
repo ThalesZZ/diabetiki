@@ -9,10 +9,12 @@
 	"author": "Thales Zarzar de Souza",
 	"license": "ISC",
 	"dependencies": {
-		"dotenv": "^16.0.3"
+		"dotenv": "^16.0.3",
+		"express": "^4.18.2"
 	},
 	"devDependencies": {
 		"@tsconfig/node16": "^1.0.3",
+		"@types/express": "^4.17.17",
 		"@types/node": "^18.15.10",
 		"ts-node": "^10.9.1",
 		"typescript": "^5.0.2"
