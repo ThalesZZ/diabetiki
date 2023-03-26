@@ -4,4 +4,4 @@ import localDatabase from "../database";
 
 const userController = new UserController(localDatabase)
 
-router.post('/user/', userController.create)
+router.post('/user/create', userController.create)
