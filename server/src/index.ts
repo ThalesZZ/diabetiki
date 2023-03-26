@@ -1,7 +1,12 @@
 import dotenv from "dotenv";
 import http from "http";
 
-const { SERVER_HOST, SERVER_PORT } = dotenv.config({ path: "../.env" }).parsed as any;
+const path = "../.env";
+const { SERVER_HOST, SERVER_PORT } = dotenv.config({ path }).parsed as any;
+
+const address = `http://${SERVER_HOST}:${SERVER_PORT}/`;
+
+console.log(`Preparing to start server at ${address}`);
 
 const server = http.createServer((req, res) => {
 	res.statusCode = 200;
@@ -10,5 +15,5 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(SERVER_HOST, SERVER_PORT, () => {
-	console.log(`Server running at http://${SERVER_HOST}:${SERVER_PORT}/`);
+	console.log(`Server running at ${address}`);
 });
