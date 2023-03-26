@@ -1,7 +1,7 @@
+import dotenv from "dotenv";
 import http from "http";
 
-const hostname = "localhost";
-const port = 3000;
+const { SERVER_HOST, SERVER_PORT } = dotenv.config({ path: "../.env" }).parsed as any;
 
 const server = http.createServer((req, res) => {
 	res.statusCode = 200;
@@ -9,6 +9,6 @@ const server = http.createServer((req, res) => {
 	res.end("Diabetiki Server");
 });
 
-server.listen(port, hostname, () => {
-	console.log(`Server running at http://${hostname}:${port}/`);
+server.listen(SERVER_HOST, SERVER_PORT, () => {
+	console.log(`Server running at http://${SERVER_HOST}:${SERVER_PORT}/`);
 });
