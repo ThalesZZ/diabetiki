@@ -14,6 +14,6 @@ const server = http.createServer((req, res) => {
 	res.end("Diabetiki Server");
 });
 
-server.listen(SERVER_HOST, SERVER_PORT, () => {
+server.listen(SERVER_PORT, SERVER_HOST, () => {
 	console.log(`Server running at ${address}`);
 });
