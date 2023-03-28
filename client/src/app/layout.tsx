@@ -3,7 +3,7 @@
 import { OceanTheme } from "@/theme/ocean";
 import { Theme } from "@/theme/Theme";
 import React from "react";
-import styled, { css, ThemeProvider } from "styled-components";
+import styled, { css, ThemeContext, ThemeProvider } from "styled-components";
 
 export default function RootLayout({
 	children,
@@ -14,9 +14,11 @@ export default function RootLayout({
 
 	return (
 		<html lang="en">
+      <ThemeContext.Provider value={{current: theme, set: setTheme}}>
 			<ThemeProvider theme={theme}>
 				<Container>{children}</Container>
 			</ThemeProvider>
+      </ThemeContext.Provider>
 		</html>
 	);
 }
