@@ -1,5 +1,12 @@
-import CreateGlucoseRecordModal from './(create-modals)/create-glucose-record-modal'
+import { Button } from 'antd'
+import Link from 'next/link'
 
 export default function Page() {
-  return <CreateGlucoseRecordModal />
+  return (
+    <>
+      <Link href={'/glucose'}>
+        <Button>{'Glucose Events'}</Button>
+      </Link>
+    </>
+  )
 }

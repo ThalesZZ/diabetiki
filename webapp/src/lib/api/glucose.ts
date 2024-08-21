@@ -2,7 +2,8 @@ import api from '.'
 
 export async function getGlucoseEvents() {
   return api.get('/glucose').then((response) => {
-    return response.data
+    const { data } = response
+    return data
   })
 }
 

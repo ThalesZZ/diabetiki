@@ -1,5 +1,6 @@
 'use client'
 
+import { createGlucoseEvent } from '@/lib/api/glucose'
 import { PlusOutlined as NewIcon } from '@ant-design/icons'
 import {
   DatePicker,
@@ -14,7 +15,6 @@ import {
 } from 'antd'
 import dayjs, { type Dayjs } from 'dayjs'
 import React from 'react'
-import { createGlucoseEvent } from '../../lib/api/glucose'
 
 type FormType = {
   timestamp: Dayjs

@@ -1,4 +1,5 @@
 import React from 'react'
+import CreateGlucoseRecordModal from './(create-modals)/create-glucose-record-modal'
 
 export default function RootLayout({
   children,
@@ -9,6 +10,8 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <main>{children}</main>
+
+        <CreateGlucoseRecordModal />
       </body>
     </html>
   )
