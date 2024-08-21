@@ -1,5 +1,6 @@
 import { Express, Router } from "express";
 import z from "zod";
+import prisma from "../lib/prisma";
 
 export async function registerGlucoseRoutes(app: Express) {
   const router = Router();
@@ -7,15 +8,20 @@ export async function registerGlucoseRoutes(app: Express) {
   app.post("/glucose", async function (req, res) {
     const schema = z.object({
       timestamp: z.coerce.date(),
-      glucose: z.number(),
+      value: z.number(),
       comment: z.string().optional(),
     });
 
     const raw = schema.parse(req.body);
-    // const event = await prisma.glucoseEvent.create({ data: raw });
+    const event = await prisma.glucoseEvent.create({ data: raw });
 
-    console.log(raw);
-    res.send(raw);
+    console.log("Created GlucoseEvent:", event);
+    res.send(event);
+  });
+
+  app.get("/glucose", async function (req, res) {
+    const events = await prisma.glucoseEvent.findMany();
+    res.send(events);
   });
 
   app.use(router);

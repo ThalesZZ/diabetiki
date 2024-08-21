@@ -14,11 +14,11 @@ import {
 } from 'antd'
 import dayjs, { type Dayjs } from 'dayjs'
 import React from 'react'
-import { createGlucoseRecord } from '../../lib/api/glucose'
+import { createGlucoseEvent } from '../../lib/api/glucose'
 
 type FormType = {
   timestamp: Dayjs
-  glucose: number
+  value: number
   comment: string
 }
 
@@ -43,7 +43,7 @@ const CreateGlucoseRecordModal: React.FC = () => {
       return await form
         .validateFields()
         .then(async (event) => {
-          return createGlucoseRecord(event)
+          return createGlucoseEvent(event)
             .then((r) => {
               setOpenModal(() => false)
               notification.success({
@@ -68,7 +68,7 @@ const CreateGlucoseRecordModal: React.FC = () => {
   }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const maxDate = React.useMemo(() => dayjs(), [openModal])
+  const now = React.useMemo(() => dayjs(), [openModal])
 
   return (
     <>
@@ -99,10 +99,11 @@ const CreateGlucoseRecordModal: React.FC = () => {
           <Form.Item<FormType>
             label={'Date and time'}
             name="timestamp"
+            initialValue={now}
             rules={[{ required: true, message: 'Required' }]}
           >
             <DatePicker
-              maxDate={maxDate}
+              maxDate={now}
               showTime={{ showSecond: false }}
               style={{ width: '100%' }}
             />
@@ -110,7 +111,8 @@ const CreateGlucoseRecordModal: React.FC = () => {
 
           <Form.Item<FormType>
             label={'Blood glucose'}
-            name="glucose"
+            name="value"
+            initialValue={100}
             rules={[{ required: true, message: 'Required' }]}
           >
             <InputNumber min={0} suffix={'mg/dL'} style={{ width: '100%' }} />
