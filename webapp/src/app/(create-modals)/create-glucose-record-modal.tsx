@@ -4,16 +4,17 @@ import { PlusOutlined as NewIcon } from '@ant-design/icons'
 import {
   DatePicker,
   FloatButton,
-  FloatButtonProps,
   Form,
   Input,
   InputNumber,
   Modal,
-  ModalProps,
   notification,
+  type FloatButtonProps,
+  type ModalProps,
 } from 'antd'
 import dayjs, { type Dayjs } from 'dayjs'
 import React from 'react'
+import { createGlucoseRecord } from '../../lib/api/glucose'
 
 type FormType = {
   timestamp: Dayjs
@@ -42,13 +43,7 @@ const CreateGlucoseRecordModal: React.FC = () => {
       return await form
         .validateFields()
         .then(async (event) => {
-          return await fetch('http://localhost:3030/glucose', {
-            method: 'POST',
-            body: JSON.stringify(event),
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          })
+          return createGlucoseRecord(event)
             .then((r) => {
               setOpenModal(() => false)
               notification.success({

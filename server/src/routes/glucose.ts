@@ -1,14 +1,21 @@
 import { Express, Router } from "express";
+import z from "zod";
 
 export async function registerGlucoseRoutes(app: Express) {
   const router = Router();
 
   app.post("/glucose", async function (req, res) {
-    // const evt = await prisma.glucoseEvent.findFirst()
+    const schema = z.object({
+      timestamp: z.coerce.date(),
+      glucose: z.number(),
+      comment: z.string().optional(),
+    });
 
-    // res.send(evt?.id || 'not founddd')
-    console.log(req.body);
-    res.send(req.body);
+    const raw = schema.parse(req.body);
+    // const event = await prisma.glucoseEvent.create({ data: raw });
+
+    console.log(raw);
+    res.send(raw);
   });
 
   app.use(router);
