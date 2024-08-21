@@ -106,7 +106,11 @@ const CreateGlucoseRecordModal: React.FC = () => {
             name="timestamp"
             rules={[{ required: true, message: 'Required' }]}
           >
-            <DatePicker maxDate={maxDate} showTime={{ showSecond: false }} />
+            <DatePicker
+              maxDate={maxDate}
+              showTime={{ showSecond: false }}
+              style={{ width: '100%' }}
+            />
           </Form.Item>
 
           <Form.Item<FormType>
@@ -114,15 +118,11 @@ const CreateGlucoseRecordModal: React.FC = () => {
             name="glucose"
             rules={[{ required: true, message: 'Required' }]}
           >
-            <InputNumber min={0} suffix={'mg/dL'} />
+            <InputNumber min={0} suffix={'mg/dL'} style={{ width: '100%' }} />
           </Form.Item>
 
           <Form.Item<FormType> label={'Comment'} name="comment">
-            <Input.TextArea
-              autoSize={{ maxRows: 5 }}
-              maxLength={100}
-              showCount
-            />
+            <Input.TextArea maxLength={100} autoSize showCount />
           </Form.Item>
         </Form>
       </Modal>
