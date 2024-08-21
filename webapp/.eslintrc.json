@@ -4,6 +4,8 @@
       "@rocketseat/eslint-config/react"
     ],
     "rules": {
-      "prettier/prettier": "warn"
+      "prettier/prettier": "warn",
+      "no-unused-vars": "warn",
+      "@typescript-eslint/no-unused-vars": "warn"
     }
   }
