@@ -5,15 +5,31 @@ import { deleteGlucoseEvent, updateGlucoseEvent } from '@/lib/api/glucose'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { Button, List, Modal, notification } from 'antd'
 import dayjs from 'dayjs'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 
 export default function EventsList({ events }: { events: any[] }) {
+  const params = useSearchParams()
+  const pathname = usePathname()
   const router = useRouter()
-  const [focusedEvent, setFocusedEvent] =
-    React.useState<(typeof events)[number]>()
-  const [isDeleting, doDelete] = React.useTransition()
 
+  const focusedEventId = params.get('id')
+  const focusedEvent = React.useMemo(() => {
+    return events.find((e) => e.id === focusedEventId)
+  }, [events, focusedEventId])
+
+  function onEdit(event: any) {
+    const params = new URLSearchParams()
+    params.set('id', event.id)
+    const route = pathname.concat('?', params.toString())
+    router.push(route)
+  }
+
+  function onCancelEdit() {
+    router.push(pathname)
+  }
+
+  const [isDeleting, doDelete] = React.useTransition()
   function onDelete(event: any) {
     Modal.confirm({
       title: 'Delete event?',
@@ -51,11 +67,13 @@ export default function EventsList({ events }: { events: any[] }) {
             actions={[
               <Button
                 key="edit-btn"
+                type="text"
                 icon={<EditOutlined />}
-                onClick={() => setFocusedEvent(() => item)}
+                onClick={() => onEdit(item)}
               />,
               <Button
                 key="delete-btn"
+                type="text"
                 icon={<DeleteOutlined />}
                 onClick={() => onDelete(item)}
                 loading={isDeleting}
@@ -69,11 +87,11 @@ export default function EventsList({ events }: { events: any[] }) {
       />
 
       <GlucoseEventModal
-        key={focusedEvent?.id}
+        key={focusedEventId}
         open={!!focusedEvent}
         event={focusedEvent}
         onSubmit={updateGlucoseEvent}
-        onClose={() => setFocusedEvent(() => undefined)}
+        onClose={onCancelEdit}
       />
     </>
   )
