@@ -1,6 +1,10 @@
+import { AntdRegistry } from '@ant-design/nextjs-registry'
+import { Layout } from 'antd'
+import { Content as LayoutContent } from 'antd/es/layout/layout'
 import React from 'react'
 import CreateGlucoseRecordModal from './(create-modals)/create-glucose-record-modal'
-import Header from './header'
+import './globals.css'
+import Sider from './sider'
 
 export default function RootLayout({
   children,
@@ -10,11 +14,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Header />
+        <AntdRegistry>
+          <Layout>
+            <Sider />
 
-        <main>{children}</main>
+            <LayoutContent>{children}</LayoutContent>
+          </Layout>
 
-        <CreateGlucoseRecordModal />
+          <CreateGlucoseRecordModal />
+        </AntdRegistry>
       </body>
     </html>
   )
