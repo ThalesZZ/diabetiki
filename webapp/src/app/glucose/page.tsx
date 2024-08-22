@@ -1,8 +1,8 @@
 import { getGlucoseEvents } from '@/lib/api/glucose'
-import React from 'react'
+import EventsList from './list'
 
 export default async function GlucoseEvents() {
   const events = await getGlucoseEvents()
 
-  return <div>{JSON.stringify(events)}</div>
+  return <EventsList events={events} />
 }

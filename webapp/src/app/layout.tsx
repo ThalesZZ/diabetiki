@@ -1,5 +1,6 @@
 import React from 'react'
 import CreateGlucoseRecordModal from './(create-modals)/create-glucose-record-modal'
+import Header from './header'
 
 export default function RootLayout({
   children,
@@ -9,6 +10,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <Header />
+
         <main>{children}</main>
 
         <CreateGlucoseRecordModal />
