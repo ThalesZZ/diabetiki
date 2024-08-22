@@ -1,8 +1,8 @@
+import NewGlucoseEventButton from '@/components/new-glucose-event-button'
 import { AntdRegistry } from '@ant-design/nextjs-registry'
 import { Layout } from 'antd'
 import { Content as LayoutContent } from 'antd/es/layout/layout'
 import React from 'react'
-import CreateGlucoseRecordModal from './(create-modals)/create-glucose-record-modal'
 import './globals.css'
 import Sider from './sider'
 
@@ -21,7 +21,7 @@ export default function RootLayout({
             <LayoutContent>{children}</LayoutContent>
           </Layout>
 
-          <CreateGlucoseRecordModal />
+          <NewGlucoseEventButton />
         </AntdRegistry>
       </body>
     </html>

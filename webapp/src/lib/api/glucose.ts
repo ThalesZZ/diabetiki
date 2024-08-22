@@ -13,6 +13,12 @@ export async function createGlucoseEvent(record) {
   })
 }
 
+export async function updateGlucoseEvent(record) {
+  return api.post('/glucose/edit', record).then((response) => {
+    return response.data
+  })
+}
+
 export async function deleteGlucoseEvent(id: string) {
   return api.delete('/glucose/' + id)
 }
