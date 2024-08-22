@@ -15,7 +15,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <AntdRegistry>
-          <Layout>
+          <Layout id="app">
             <Sider />
 
             <LayoutContent>{children}</LayoutContent>

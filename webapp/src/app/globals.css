@@ -4,8 +4,7 @@
 
 body {
     height: 100vh;
-
-    > div {
+    #app {
         height: 100%;
     }
 }
