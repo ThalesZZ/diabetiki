@@ -12,6 +12,7 @@ import {
 import {
   Button,
   Checkbox,
+  Flex,
   List,
   Modal,
   notification,
@@ -23,6 +24,7 @@ import dayjs from 'dayjs'
 import { Droplet, MessageCircleMore } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
+import Controls from './controls'
 
 export default function EventsList({ events }: { events: GlucoseEvent[] }) {
   const params = useSearchParams()
@@ -84,7 +86,9 @@ export default function EventsList({ events }: { events: GlucoseEvent[] }) {
   }
 
   return (
-    <>
+    <Flex vertical>
+      <Controls />
+
       <List
         size="small"
         dataSource={events}
@@ -133,7 +137,7 @@ export default function EventsList({ events }: { events: GlucoseEvent[] }) {
                 <Typography.Text>
                   <Space>
                     <Droplet className="w-4 h-4" />
-                    {`${item.value} mg/dL`}
+                    {item.value}
                   </Space>
                 </Typography.Text>
                 {item.comment && (
@@ -156,6 +160,6 @@ export default function EventsList({ events }: { events: GlucoseEvent[] }) {
         onSubmit={updateGlucoseEvent}
         onClose={onCancelEdit}
       />
-    </>
+    </Flex>
   )
 }
