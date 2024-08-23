@@ -47,7 +47,19 @@ export async function registerGlucoseRoutes(app: Express) {
   });
 
   app.get("/glucose", async function (req, res) {
-    const events = await prisma.glucoseEvent.findMany();
+    const { start: startString, end: endString } = req.query;
+
+    const start = Number(startString);
+    const end = Number(endString);
+
+    const events = await prisma.glucoseEvent.findMany({
+      where: {
+        timestamp: {
+          gte: new Date(start),
+          lte: new Date(end),
+        },
+      },
+    });
     res.send(events);
   });
 

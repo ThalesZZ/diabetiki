@@ -1,4 +1,5 @@
 import { GlucoseEvent } from '@/lib/model'
+import { blue } from '@ant-design/colors'
 import {
   CalendarOutlined,
   ClockCircleOutlined,
@@ -8,6 +9,7 @@ import {
 import { Button, Checkbox, List, Space, Tooltip, Typography } from 'antd'
 import { Droplet, MessageCircleMore } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
+import React from 'react'
 
 export type ListItemProps = {
   item: GlucoseEvent
@@ -20,7 +22,6 @@ export type ListItemProps = {
 
 export default function ListItem({
   item,
-  index,
   isChecked,
   disableActions,
   setChecked,
@@ -35,8 +36,16 @@ export default function ListItem({
     router.push(route)
   }
 
+  const style = React.useMemo<React.CSSProperties>(() => {
+    if (!isChecked) return
+    return {
+      backgroundColor: blue.at(0)
+    }
+  }, [isChecked])
+
   return (
     <List.Item
+      style={style}
       key={item.id}
       actions={[
         <Button

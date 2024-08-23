@@ -1,12 +1,21 @@
-import { GlucoseEvent } from '@/lib/model'
-import api from '.'
-import { GlucoseEventDTO } from '../model/GlucoseEvent'
+import { GlucoseEvent } from '@/lib/model';
+import api from '.';
+import { GlucoseEventDTO, parse } from '../model/GlucoseEvent';
 
-export async function getGlucoseEvents() {
-  return api.get<GlucoseEventDTO[]>('/glucose').then((response) => {
-    const { data } = response
-    return data
-  })
+export async function getGlucoseEvents(params: { start: number; end: number }) {
+  const searchParams = '?'.concat(
+    new URLSearchParams({
+      start: params.start.toString(),
+      end: params.end.toString(),
+    }).toString(),
+  )
+
+  return api
+    .get<GlucoseEventDTO[]>('/glucose'.concat(searchParams))
+    .then((response) => {
+      const { data } = response
+      return data.map(parse)
+    })
 }
 
 export async function createGlucoseEvent(event: Omit<GlucoseEvent, 'id'>) {

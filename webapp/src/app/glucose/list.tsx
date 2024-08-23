@@ -1,9 +1,12 @@
 'use client'
 
 import GlucoseEventModal from '@/components/glucose-event-modal'
-import { deleteGlucoseEvent, updateGlucoseEvent } from '@/lib/api/glucose'
+import {
+  deleteGlucoseEvent,
+  getGlucoseEvents,
+  updateGlucoseEvent,
+} from '@/lib/api/glucose'
 import { GlucoseEvent } from '@/lib/model'
-import { GlucoseEventDTO, parse } from '@/lib/model/GlucoseEvent'
 import { DeleteOutlined, DownOutlined } from '@ant-design/icons'
 import {
   Button,
@@ -41,14 +44,18 @@ const sortOptions: SortOption[] = [
   },
 ]
 
-export default function EventsList({
-  events: eventsDTO,
-}: {
-  events: GlucoseEventDTO[]
-}) {
+const format = 'YYYY-MM-DD'
+
+export default function EventsList() {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()
+
+  const [startParam, endParam] = React.useMemo(() => {
+    const start = searchParams.get('start')
+    const end = searchParams.get('end')
+    return [start, end]
+  }, [searchParams])
 
   const [selectedSortKey, setSelectedSortKey] =
     React.useState<SortOptionKey>('Newest first')
@@ -56,13 +63,14 @@ export default function EventsList({
     GlucoseEvent['id'][]
   >([])
 
+  const [rawEvents, setRawEvents] = React.useState<GlucoseEvent[]>([])
   const events = React.useMemo(() => {
-    return eventsDTO.map(parse).sort((ev1, ev2) => {
+    return rawEvents.sort((ev1, ev2) => {
       const diff = ev1.timestamp.valueOf() - ev2.timestamp.valueOf()
       const toggler = selectedSortKey === 'Oldest first' ? 1 : -1
       return diff * toggler
     })
-  }, [eventsDTO, selectedSortKey])
+  }, [rawEvents, selectedSortKey])
 
   const focusedEventId = searchParams.get('id')
   const [spanStart, spanEnd] = React.useMemo(() => {
@@ -70,14 +78,10 @@ export default function EventsList({
       const startTs = Number(startParam)
       const endTs = Number(endParam)
 
-      const format = 'YYYY-MM-DD'
-      const start = dayjs(startTs).format(format)
-      const end = dayjs(endTs).format(format)
+      const start = dayjs(startTs)
+      const end = dayjs(endTs)
       return [start, end]
     }
-
-    const startParam = searchParams.get('start')
-    const endParam = searchParams.get('end')
 
     if (!startParam && !endParam) {
       const [_defaultStart, _defaultEnd] = defaultSpanOption.getValue()
@@ -87,7 +91,7 @@ export default function EventsList({
     }
 
     return getDatesFromParams(startParam, endParam)
-  }, [searchParams])
+  }, [endParam, startParam])
 
   const focusedEvent = React.useMemo(() => {
     return events.find((e) => e.id === focusedEventId)
@@ -146,6 +150,13 @@ export default function EventsList({
     })
   }
 
+  React.useEffect(() => {
+    const filters = { start: spanStart.valueOf(), end: spanEnd.valueOf() }
+    getGlucoseEvents(filters).then((response) => {
+      setRawEvents(response)
+    })
+  }, [spanEnd, spanStart])
+
   return (
     <Flex vertical gap="small">
       <Controls />
@@ -154,7 +165,7 @@ export default function EventsList({
         header={
           <Flex justify="space-between" align="center">
             <Space>
-              <span>{`Showing ${events.length} events from ${spanStart} to ${spanEnd}`}</span>
+              <span>{`Showing ${events.length} events from ${spanStart.format(format)} to ${spanEnd.format(format)}`}</span>
               {checkedEvents.length > 0 && (
                 <>
                   <Divider type="vertical" />
