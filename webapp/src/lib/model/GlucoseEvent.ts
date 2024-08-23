@@ -14,11 +14,12 @@ export interface GlucoseEvent {
   comment?: string
 }
 
-export function fromDTO(dto: GlucoseEventDTO): GlucoseEvent {
-  return {
+export function parse(dto: GlucoseEventDTO): GlucoseEvent {
+  const evt = {
     id: dto.id,
     timestamp: dayjs(dto.timestamp),
     value: dto.value,
     comment: dto.comment,
   }
+  return evt
 }

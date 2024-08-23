@@ -3,15 +3,19 @@
 import GlucoseEventModal from '@/components/glucose-event-modal'
 import { deleteGlucoseEvent, updateGlucoseEvent } from '@/lib/api/glucose'
 import { GlucoseEvent } from '@/lib/model'
+import { GlucoseEventDTO, parse } from '@/lib/model/GlucoseEvent'
 import {
   CalendarOutlined,
   ClockCircleOutlined,
   DeleteOutlined,
+  DownOutlined,
   EditOutlined,
 } from '@ant-design/icons'
 import {
   Button,
   Checkbox,
+  Dropdown,
+  DropdownProps,
   Flex,
   List,
   Modal,
@@ -21,15 +25,54 @@ import {
   Typography,
 } from 'antd'
 import dayjs from 'dayjs'
-import { Droplet, MessageCircleMore } from 'lucide-react'
+import {
+  CalendarArrowDown,
+  CalendarArrowUp,
+  Droplet,
+  MessageCircleMore,
+} from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 import Controls, { defaultSpanOption } from './controls'
 
-export default function EventsList({ events }: { events: GlucoseEvent[] }) {
+type SortOptionKey = 'Newest first' | 'Oldest first'
+type SortOption = DropdownProps['menu']['items'][number] & {
+  key: SortOptionKey
+}
+
+const sortOptions: SortOption[] = [
+  {
+    key: 'Newest first',
+    label: 'Newest first',
+    icon: <CalendarArrowDown className="w-4 h-4" />,
+  },
+  {
+    key: 'Oldest first',
+    label: 'Oldest first',
+    icon: <CalendarArrowUp className="w-4 h-4" />,
+  },
+]
+
+export default function EventsList({
+  events: eventsDTO,
+}: {
+  events: GlucoseEventDTO[]
+}) {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()
+
+  const [selectedSortKey, setSelectedSortKey] =
+    React.useState<SortOptionKey>('Oldest first')
+  const [checkedEvents, setCheckedEvents] = React.useState<string[]>([])
+
+  const events = React.useMemo(() => {
+    return eventsDTO.map(parse).sort((ev1, ev2) => {
+      const diff = ev1.timestamp.valueOf() - ev2.timestamp.valueOf()
+      const toggler = selectedSortKey === 'Oldest first' ? 1 : -1
+      return diff * toggler
+    })
+  }, [eventsDTO, selectedSortKey])
 
   const focusedEventId = searchParams.get('id')
   const [spanStart, spanEnd] = React.useMemo(() => {
@@ -59,8 +102,6 @@ export default function EventsList({ events }: { events: GlucoseEvent[] }) {
   const focusedEvent = React.useMemo(() => {
     return events.find((e) => e.id === focusedEventId)
   }, [events, focusedEventId])
-
-  const [checkedEvents, setCheckedEvents] = React.useState<string[]>([])
 
   function toggleCheckEvent(event: GlucoseEvent, check: boolean) {
     setCheckedEvents((prev) => {
@@ -114,13 +155,27 @@ export default function EventsList({ events }: { events: GlucoseEvent[] }) {
       <Controls />
 
       <List
-        header={`Showing ${events.length} events from ${spanStart} to ${spanEnd}`}
+        header={
+          <Flex justify="space-between" align="center">
+            <span>{`Showing ${events.length} events from ${spanStart} to ${spanEnd}`}</span>
+            <Dropdown
+              menu={{
+                items: sortOptions,
+                onClick: (evt) => setSelectedSortKey(evt.key as SortOptionKey),
+                selectedKeys: [selectedSortKey],
+              }}
+            >
+              <Button icon={<DownOutlined />} iconPosition="end" type="link">
+                {selectedSortKey}
+              </Button>
+            </Dropdown>
+          </Flex>
+        }
         bordered
         size="small"
         dataSource={events}
         renderItem={(item) => {
           const isChecked = checkedEvents.includes(item.id)
-          const ts = dayjs(item.timestamp)
 
           return (
             <List.Item
@@ -150,13 +205,13 @@ export default function EventsList({ events }: { events: GlucoseEvent[] }) {
                 <Typography.Text type="secondary">
                   <Space>
                     {<CalendarOutlined />}
-                    {ts.format('YYYY-MM-DD')}
+                    {item.timestamp.format('YYYY-MM-DD')}
                   </Space>
                 </Typography.Text>
                 <Typography.Text type="secondary">
                   <Space>
                     {<ClockCircleOutlined />}
-                    {ts.format('HH:mm')}
+                    {item.timestamp.format('HH:mm')}
                   </Space>
                 </Typography.Text>
                 <Typography.Text>

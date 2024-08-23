@@ -1,6 +1,7 @@
 'use client'
 
 import { GlucoseEvent } from '@/lib/model'
+import { GlucoseEventDTO } from '@/lib/model/GlucoseEvent'
 import {
   DatePicker,
   Form,
@@ -17,7 +18,7 @@ import React from 'react'
 export type GlucoseEventModalProps = {
   event?: GlucoseEvent
   open: boolean
-  onSubmit: (event: GlucoseEvent) => Promise<GlucoseEvent>
+  onSubmit: (event: GlucoseEvent) => Promise<GlucoseEventDTO>
   onClose: VoidFunction
 }
 
