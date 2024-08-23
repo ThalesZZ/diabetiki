@@ -92,11 +92,8 @@ export default function Controls() {
   }, [span])
 
   const onSearch = React.useCallback(() => {
-    const [startTs, endTs] = spanTs
-    const params = new URLSearchParams()
-    params.set('start', startTs)
-    params.set('end', endTs)
-
+    const [start, end] = spanTs
+    const params = new URLSearchParams({ start, end })
     const route = pathname.concat('?', params.toString())
     router.push(route)
   }, [pathname, router, spanTs])

@@ -23,6 +23,7 @@ export async function updateGlucoseEvent(event: GlucoseEvent) {
   })
 }
 
-export async function deleteGlucoseEvent(id: string) {
-  return api.delete('/glucose/' + id)
+export async function deleteGlucoseEvent(eventsIds: GlucoseEvent['id'][]) {
+  const params = new URLSearchParams({ ids: eventsIds.join(',') })
+  return api.delete('/glucose'.concat('?', params.toString()))
 }

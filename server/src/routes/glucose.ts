@@ -36,10 +36,14 @@ export async function registerGlucoseRoutes(app: Express) {
     res.send(event);
   });
 
-  app.delete("/glucose/:id", async function (req, res) {
-    const { id } = req.params;
-    const event = await prisma.glucoseEvent.delete({ where: { id } });
-    res.send(event);
+  app.delete("/glucose", async function (req, res) {
+    const { ids: stringIds } = req.query;
+    const ids = (stringIds as string).split(",");
+
+    const events = await prisma.glucoseEvent.deleteMany({
+      where: { id: { in: ids } },
+    });
+    res.send(events);
   });
 
   app.get("/glucose", async function (req, res) {

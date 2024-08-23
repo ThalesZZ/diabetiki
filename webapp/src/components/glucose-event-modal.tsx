@@ -50,12 +50,12 @@ export default function GlucoseEventModal({
         .then(async (values) => {
           return onSubmit(values)
             .then(() => {
-              router.refresh()
-              onClose()
               notification.success({
                 placement: 'top',
                 message: 'Record successfuly saved',
               })
+              onClose()
+              router.refresh()
             })
             .catch(() => {
               notification.error({

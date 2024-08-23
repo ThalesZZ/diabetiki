@@ -4,16 +4,10 @@ import GlucoseEventModal from '@/components/glucose-event-modal'
 import { deleteGlucoseEvent, updateGlucoseEvent } from '@/lib/api/glucose'
 import { GlucoseEvent } from '@/lib/model'
 import { GlucoseEventDTO, parse } from '@/lib/model/GlucoseEvent'
-import {
-  CalendarOutlined,
-  ClockCircleOutlined,
-  DeleteOutlined,
-  DownOutlined,
-  EditOutlined,
-} from '@ant-design/icons'
+import { DeleteOutlined, DownOutlined } from '@ant-design/icons'
 import {
   Button,
-  Checkbox,
+  Divider,
   Dropdown,
   DropdownProps,
   Flex,
@@ -21,19 +15,13 @@ import {
   Modal,
   notification,
   Space,
-  Tooltip,
-  Typography,
 } from 'antd'
 import dayjs from 'dayjs'
-import {
-  CalendarArrowDown,
-  CalendarArrowUp,
-  Droplet,
-  MessageCircleMore,
-} from 'lucide-react'
+import { CalendarArrowDown, CalendarArrowUp } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 import Controls, { defaultSpanOption } from './controls'
+import ListItem, { ListItemProps } from './list-item'
 
 type SortOptionKey = 'Newest first' | 'Oldest first'
 type SortOption = DropdownProps['menu']['items'][number] & {
@@ -63,8 +51,10 @@ export default function EventsList({
   const router = useRouter()
 
   const [selectedSortKey, setSelectedSortKey] =
-    React.useState<SortOptionKey>('Oldest first')
-  const [checkedEvents, setCheckedEvents] = React.useState<string[]>([])
+    React.useState<SortOptionKey>('Newest first')
+  const [checkedEvents, setCheckedEvents] = React.useState<
+    GlucoseEvent['id'][]
+  >([])
 
   const events = React.useMemo(() => {
     return eventsDTO.map(parse).sort((ev1, ev2) => {
@@ -103,7 +93,7 @@ export default function EventsList({
     return events.find((e) => e.id === focusedEventId)
   }, [events, focusedEventId])
 
-  function toggleCheckEvent(event: GlucoseEvent, check: boolean) {
+  const toggleCheckEvent: ListItemProps['setChecked'] = (event, check) => {
     setCheckedEvents((prev) => {
       const curr = [...prev]
       if (check) curr.push(event.id)
@@ -112,27 +102,33 @@ export default function EventsList({
     })
   }
 
-  function onEdit(event: GlucoseEvent) {
-    const params = new URLSearchParams()
-    params.set('id', event.id)
-    const route = pathname.concat('?', params.toString())
-    router.push(route)
-  }
-
   function onCancelEdit() {
     router.push(pathname)
   }
 
   const [isDeleting, doDelete] = React.useTransition()
-  function onDelete(event: GlucoseEvent) {
+  function onDelete(
+    eventsIds: typeof checkedEvents,
+    src: 'delete-selected-items' | 'delete-item',
+  ) {
     Modal.confirm({
-      title: 'Delete event?',
+      title: eventsIds.length > 1 ? 'Delete events?' : 'Delete event?',
       okText: 'Delete',
       okType: 'danger',
       onOk: () => {
         doDelete(async () => {
-          await deleteGlucoseEvent(event.id)
+          await deleteGlucoseEvent(eventsIds)
             .then(() => {
+              setCheckedEvents((prev) => {
+                if (src === 'delete-selected-items') return []
+
+                const next = [...prev]
+                const [deletedId] = eventsIds
+                const index = next.indexOf(deletedId)
+                if (index >= 0) next.splice(index, 1)
+                return next
+              })
+
               router.refresh()
               notification.success({
                 placement: 'top',
@@ -157,7 +153,34 @@ export default function EventsList({
       <List
         header={
           <Flex justify="space-between" align="center">
-            <span>{`Showing ${events.length} events from ${spanStart} to ${spanEnd}`}</span>
+            <Space>
+              <span>{`Showing ${events.length} events from ${spanStart} to ${spanEnd}`}</span>
+              {checkedEvents.length > 0 && (
+                <>
+                  <Divider type="vertical" />
+                  <Button
+                    icon={<DeleteOutlined />}
+                    type="text"
+                    size="small"
+                    danger
+                    onClick={() =>
+                      onDelete(checkedEvents, 'delete-selected-items')
+                    }
+                  >
+                    {'Delete selected events'}
+                  </Button>
+
+                  <Button
+                    type="link"
+                    size="small"
+                    onClick={() => setCheckedEvents([])}
+                  >
+                    {'Clear selection'}
+                  </Button>
+                </>
+              )}
+            </Space>
+
             <Dropdown
               menu={{
                 items: sortOptions,
@@ -174,61 +197,17 @@ export default function EventsList({
         bordered
         size="small"
         dataSource={events}
-        renderItem={(item) => {
+        renderItem={(item, index) => {
           const isChecked = checkedEvents.includes(item.id)
-
           return (
-            <List.Item
-              key={item.id}
-              actions={[
-                <Button
-                  key="edit-btn"
-                  type="text"
-                  icon={<EditOutlined />}
-                  onClick={() => onEdit(item)}
-                />,
-                <Button
-                  key="delete-btn"
-                  type="text"
-                  icon={<DeleteOutlined />}
-                  onClick={() => onDelete(item)}
-                  loading={isDeleting}
-                  danger
-                />,
-              ]}
-            >
-              <Space size="middle">
-                <Checkbox
-                  checked={isChecked}
-                  onClick={() => toggleCheckEvent(item, !isChecked)}
-                />
-                <Typography.Text type="secondary">
-                  <Space>
-                    {<CalendarOutlined />}
-                    {item.timestamp.format('YYYY-MM-DD')}
-                  </Space>
-                </Typography.Text>
-                <Typography.Text type="secondary">
-                  <Space>
-                    {<ClockCircleOutlined />}
-                    {item.timestamp.format('HH:mm')}
-                  </Space>
-                </Typography.Text>
-                <Typography.Text>
-                  <Space>
-                    <Droplet className="w-4 h-4" />
-                    {item.value}
-                  </Space>
-                </Typography.Text>
-                {item.comment && (
-                  <Typography.Text type="secondary">
-                    <Tooltip title={item.comment} placement="rightTop">
-                      <MessageCircleMore className="w-4 h-4" />
-                    </Tooltip>
-                  </Typography.Text>
-                )}
-              </Space>
-            </List.Item>
+            <ListItem
+              item={item}
+              index={index}
+              isChecked={isChecked}
+              disableActions={isDeleting}
+              setChecked={toggleCheckEvent}
+              deleteItem={(event) => onDelete([event.id], 'delete-item')}
+            />
           )
         }}
       />
