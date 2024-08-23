@@ -1,29 +1,23 @@
 'use client'
 
+import { GlucoseEvent } from '@/lib/model'
 import {
-    DatePicker,
-    Form,
-    Input,
-    InputNumber,
-    Modal,
-    notification,
-    type ModalProps,
+  DatePicker,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  notification,
+  type ModalProps,
 } from 'antd'
-import dayjs, { Dayjs } from 'dayjs'
+import dayjs from 'dayjs'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 
-type FormType = {
-  id?: string
-  timestamp: Dayjs
-  value: number
-  comment: string
-}
-
 export type GlucoseEventModalProps = {
-  event?: FormType
+  event?: GlucoseEvent
   open: boolean
-  onSubmit: <T>(event: FormType) => Promise<T | void>
+  onSubmit: (event: GlucoseEvent) => Promise<GlucoseEvent>
   onClose: VoidFunction
 }
 
@@ -36,13 +30,13 @@ export default function GlucoseEventModal({
   const router = useRouter()
   const editMode = !!event
 
-  const [form] = Form.useForm<FormType>()
+  const [form] = Form.useForm<GlucoseEvent>()
   const [isSubmitting, doSubmit] = React.useTransition()
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const now = React.useMemo(() => dayjs(), [open])
 
-  const initialValues = React.useMemo<Partial<FormType>>(() => {
+  const initialValues = React.useMemo<Partial<GlucoseEvent>>(() => {
     if (editMode) return { ...event, timestamp: dayjs(event?.timestamp) }
     return { timestamp: now, value: 100 }
   }, [event, editMode, now])
@@ -101,8 +95,8 @@ export default function GlucoseEventModal({
         labelCol={{ span: 6 }}
         labelWrap
       >
-        <Form.Item<FormType> name="id" hidden />
-        <Form.Item<FormType>
+        <Form.Item<GlucoseEvent> name="id" hidden />
+        <Form.Item<GlucoseEvent>
           label={'Date and time'}
           name="timestamp"
           rules={[{ required: true, message: 'Required' }]}
@@ -114,7 +108,7 @@ export default function GlucoseEventModal({
           />
         </Form.Item>
 
-        <Form.Item<FormType>
+        <Form.Item<GlucoseEvent>
           label={'Blood glucose'}
           name="value"
           rules={[{ required: true, message: 'Required' }]}
@@ -122,7 +116,7 @@ export default function GlucoseEventModal({
           <InputNumber min={0} suffix={'mg/dL'} style={{ width: '100%' }} />
         </Form.Item>
 
-        <Form.Item<FormType> label={'Comment'} name="comment">
+        <Form.Item<GlucoseEvent> label={'Comment'} name="comment">
           <Input.TextArea maxLength={100} autoSize showCount />
         </Form.Item>
       </Form>

@@ -2,6 +2,7 @@
 
 import GlucoseEventModal from '@/components/glucose-event-modal'
 import { deleteGlucoseEvent, updateGlucoseEvent } from '@/lib/api/glucose'
+import { GlucoseEvent } from '@/lib/model'
 import {
   CalendarOutlined,
   ClockCircleOutlined,
@@ -23,7 +24,7 @@ import { Droplet, MessageCircleMore } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 
-export default function EventsList({ events }: { events: any[] }) {
+export default function EventsList({ events }: { events: GlucoseEvent[] }) {
   const params = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()
@@ -35,7 +36,7 @@ export default function EventsList({ events }: { events: any[] }) {
 
   const [checkedEvents, setCheckedEvents] = React.useState<string[]>([])
 
-  function toggleCheckEvent(event: any, check: boolean) {
+  function toggleCheckEvent(event: GlucoseEvent, check: boolean) {
     setCheckedEvents((prev) => {
       const curr = [...prev]
       if (check) curr.push(event.id)
@@ -44,7 +45,7 @@ export default function EventsList({ events }: { events: any[] }) {
     })
   }
 
-  function onEdit(event: any) {
+  function onEdit(event: GlucoseEvent) {
     const params = new URLSearchParams()
     params.set('id', event.id)
     const route = pathname.concat('?', params.toString())
@@ -56,7 +57,7 @@ export default function EventsList({ events }: { events: any[] }) {
   }
 
   const [isDeleting, doDelete] = React.useTransition()
-  function onDelete(event: any) {
+  function onDelete(event: GlucoseEvent) {
     Modal.confirm({
       title: 'Delete event?',
       okText: 'Delete',
