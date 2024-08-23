@@ -1,6 +1,6 @@
 import NewGlucoseEventButton from '@/components/new-glucose-event-button'
 import { AntdRegistry } from '@ant-design/nextjs-registry'
-import { Layout } from 'antd'
+import { App, Layout } from 'antd'
 import { Content as LayoutContent } from 'antd/es/layout/layout'
 import React from 'react'
 import './globals.css'
@@ -15,13 +15,15 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <AntdRegistry>
-          <Layout id="app">
-            <Sider />
+          <App>
+            <Layout>
+              <Sider />
 
-            <LayoutContent>{children}</LayoutContent>
-          </Layout>
+              <LayoutContent>{children}</LayoutContent>
+            </Layout>
 
-          <NewGlucoseEventButton />
+            <NewGlucoseEventButton />
+          </App>
         </AntdRegistry>
       </body>
     </html>
