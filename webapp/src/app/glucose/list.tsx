@@ -24,14 +24,38 @@ import dayjs from 'dayjs'
 import { Droplet, MessageCircleMore } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
-import Controls from './controls'
+import Controls, { defaultSpanOption } from './controls'
 
 export default function EventsList({ events }: { events: GlucoseEvent[] }) {
-  const params = useSearchParams()
+  const searchParams = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()
 
-  const focusedEventId = params.get('id')
+  const focusedEventId = searchParams.get('id')
+  const [spanStart, spanEnd] = React.useMemo(() => {
+    const getDatesFromParams = (startParam: string, endParam: string) => {
+      const startTs = Number(startParam)
+      const endTs = Number(endParam)
+
+      const format = 'YYYY-MM-DD'
+      const start = dayjs(startTs).format(format)
+      const end = dayjs(endTs).format(format)
+      return [start, end]
+    }
+
+    const startParam = searchParams.get('start')
+    const endParam = searchParams.get('end')
+
+    if (!startParam && !endParam) {
+      const [_defaultStart, _defaultEnd] = defaultSpanOption.getValue()
+      const defaultStart = _defaultStart.valueOf().toString()
+      const defaultEnd = _defaultEnd.valueOf().toString()
+      return getDatesFromParams(defaultStart, defaultEnd)
+    }
+
+    return getDatesFromParams(startParam, endParam)
+  }, [searchParams])
+
   const focusedEvent = React.useMemo(() => {
     return events.find((e) => e.id === focusedEventId)
   }, [events, focusedEventId])
@@ -86,13 +110,14 @@ export default function EventsList({ events }: { events: GlucoseEvent[] }) {
   }
 
   return (
-    <Flex vertical>
+    <Flex vertical gap="small">
       <Controls />
 
       <List
+        header={`Showing ${events.length} events from ${spanStart} to ${spanEnd}`}
+        bordered
         size="small"
         dataSource={events}
-        bordered
         renderItem={(item) => {
           const isChecked = checkedEvents.includes(item.id)
           const ts = dayjs(item.timestamp)

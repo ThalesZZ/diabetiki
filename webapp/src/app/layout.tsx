@@ -19,7 +19,7 @@ export default function RootLayout({
             <Layout>
               <Sider />
 
-              <LayoutContent>{children}</LayoutContent>
+              <LayoutContent className="px-4">{children}</LayoutContent>
             </Layout>
 
             <NewGlucoseEventButton />
