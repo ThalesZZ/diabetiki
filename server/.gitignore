@@ -5,11 +5,3 @@ target/
 
 *.jar
 *.war
-
-.idea/
-*.iml
-*.iws
-.vscode/
-.project
-.classpath
-.settings/
