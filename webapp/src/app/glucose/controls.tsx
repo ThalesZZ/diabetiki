@@ -18,34 +18,25 @@ const options = {
   last7Days: {
     label: 'Last 7 days',
     getValue() {
-      return [
-        dayjs().startOf('day').subtract(1, 'week'),
-        dayjs().endOf('day').subtract(1, 'day'),
-      ]
+      return [dayjs().startOf('day').subtract(1, 'week'), dayjs().endOf('day')]
     },
   },
   last30Days: {
     label: 'Last 30 days',
     getValue() {
-      return [
-        dayjs().startOf('day').subtract(1, 'month'),
-        dayjs().endOf('day').subtract(1, 'day'),
-      ]
+      return [dayjs().startOf('day').subtract(1, 'month'), dayjs().endOf('day')]
     },
   },
   last3Months: {
     label: 'Last 3 months',
     getValue() {
-      return [
-        dayjs().startOf('day').subtract(3, 'month'),
-        dayjs().endOf('day').subtract(1, 'day'),
-      ]
+      return [dayjs().startOf('day').subtract(3, 'month'), dayjs().endOf('day')]
     },
   },
   custom: {
     label: 'Custom',
     getValue() {
-      return [dayjs(), dayjs()]
+      throw new Error('Can not get span value from custom option')
     },
   },
 }
