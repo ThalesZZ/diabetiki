@@ -5,18 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6cacfef1-fea1-4fda-811b-9f0317137dcc" name="Changes" comment="started scratch of entities">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/remote-targets.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/diabetiki.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/diabetiki.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/thaleszz/diabetiki/persistence/entity/HealthProfileEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/thaleszz/diabetiki/persistence/entity/SensitivityProfileEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/thaleszz/diabetiki/persistence/entity/UserEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/thaleszz/diabetiki/persistence/repository/HealthProfileRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/thaleszz/diabetiki/persistence/repository/SensitivityProfileRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/thaleszz/diabetiki/persistence/repository/UserRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/prototype.drawio" beforeDir="false" afterPath="$PROJECT_DIR$/prototype.drawio" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/server/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +22,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
