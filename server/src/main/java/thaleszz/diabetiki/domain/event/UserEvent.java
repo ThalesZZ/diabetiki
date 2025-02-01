@@ -1,4 +1,4 @@
-package thaleszz.diabetiki.events;
+package thaleszz.diabetiki.domain.event;
 
 import java.util.UUID;
 

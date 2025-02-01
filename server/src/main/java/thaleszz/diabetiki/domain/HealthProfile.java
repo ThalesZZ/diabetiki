@@ -1,4 +1,4 @@
-package thaleszz.diabetiki.model.domain;
+package thaleszz.diabetiki.domain;
 
 import lombok.Getter;
 
