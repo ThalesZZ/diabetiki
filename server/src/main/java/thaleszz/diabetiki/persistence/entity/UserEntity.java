@@ -14,11 +14,11 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID uuid;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private ThresholdsEntity thresholds;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<HealthProfileEntity> healthProfiles;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<SensitivityProfileEntity> sensitivityProfiles;
 
     private String name;

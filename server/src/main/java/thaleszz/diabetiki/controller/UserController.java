@@ -1,34 +1,29 @@
 package thaleszz.diabetiki.controller;
 
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import thaleszz.diabetiki.controller.dto.UserDTO;
-import thaleszz.diabetiki.controller.group.CreateEntity;
 import thaleszz.diabetiki.domain.User;
-import thaleszz.diabetiki.persistence.entity.UserEntity;
-import thaleszz.diabetiki.persistence.repository.UserRepository;
+import thaleszz.diabetiki.service.UserService;
 
 @RestController
 @RequestMapping("/user")
-@Validated
 @AllArgsConstructor
 public class UserController {
 
-    private final UserRepository userRepository;
-    private final ModelMapper modelMapper;
+    private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserDTO> create(@RequestBody @Validated(CreateEntity.class) UserDTO data) {
-        User user = this.modelMapper.map(data, User.class);
-        UserEntity userEntity = this.modelMapper.map(data, UserEntity.class);
-        // TODO validate before persist
-        return null;
+    public ResponseEntity<UserDTO> create(@RequestBody UserDTO data) {
+        User user = this.userService.create(data);
+        return ResponseEntity.noContent().build(); // TODO
+    }
+
+    @GetMapping("/{email}")
+    public ResponseEntity<UserDTO> get(@PathVariable("email") String email) {
+        User user = this.userService.find(email);
+        return ResponseEntity.noContent().build(); // TODO
     }
 
 }
