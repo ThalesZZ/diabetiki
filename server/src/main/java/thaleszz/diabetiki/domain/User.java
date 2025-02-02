@@ -1,19 +1,19 @@
 package thaleszz.diabetiki.domain;
 
-import lombok.AllArgsConstructor;
+import lombok.Data;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
-@AllArgsConstructor
+@Data
 public class User {
-    private final UUID uuid;
-    private final String name;
-    private final String email;
-    private final Thresholds thresholds;
-    private final List<SensitivityProfile> sensitivityProfiles;
-    private final List<HealthProfile> healthProfiles;
+    private UUID uuid;
+    private String name;
+    private String email;
+    private Thresholds thresholds;
+    private List<SensitivityProfile> sensitivityProfiles;
+    private List<HealthProfile> healthProfiles;
 
     public SensitivityProfile getCurrentSensitivityProfile() {
         return this.sensitivityProfiles.stream().max(Comparator.comparing(SensitivityProfile::getDate)).orElseThrow();

@@ -14,6 +14,8 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID uuid;
 
+    @OneToOne(mappedBy = "user")
+    private ThresholdsEntity thresholds;
     @OneToMany(mappedBy = "user")
     private List<HealthProfileEntity> healthProfiles;
     @OneToMany(mappedBy = "user")

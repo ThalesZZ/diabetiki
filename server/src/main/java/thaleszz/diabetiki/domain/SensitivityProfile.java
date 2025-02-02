@@ -1,13 +1,13 @@
 package thaleszz.diabetiki.domain;
 
-import lombok.Getter;
+import lombok.Data;
 
 import java.util.Date;
 import java.util.UUID;
 
+@Data
 public class SensitivityProfile {
     private UUID uuid;
-    @Getter
     private Date date;
     private int targetBloodGlucose;
     private float bloodGlucoseSensitivity;
