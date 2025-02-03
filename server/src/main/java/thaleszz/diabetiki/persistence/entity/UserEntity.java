@@ -21,6 +21,7 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<SensitivityProfileEntity> sensitivityProfiles;
 
-    private String name;
+    @Column(unique = true, nullable = false)
     private String email;
+    private String name;
 }
