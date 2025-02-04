@@ -10,8 +10,6 @@ import thaleszz.diabetiki.domain.User;
 import thaleszz.diabetiki.persistence.entity.UserEntity;
 import thaleszz.diabetiki.persistence.repository.UserRepository;
 
-import java.util.Optional;
-
 @Service
 @AllArgsConstructor
 public class UserService {
@@ -21,14 +19,22 @@ public class UserService {
     public User create(@Validated(CreateEntity.class) UserDTO data) {
         User user = this.modelMapper.map(data, User.class);
         UserEntity userEntity = this.modelMapper.map(user, UserEntity.class);
-        userEntity.getThresholds().setUser(null);
+        userEntity.getThresholds().setUser(userEntity);
+        userEntity.getSensitivityProfiles().forEach(p -> p.setUser(userEntity));
+        userEntity.getHealthProfiles().forEach(p -> p.setUser(userEntity));
+
         // TODO validate before persist
         UserEntity saved = this.userRepository.save(userEntity);
         return this.modelMapper.map(saved, User.class);
     }
 
     public User find(String email) {
-        Optional<UserEntity> user = this.userRepository.findByEmail(email);
+        UserEntity user = this.userRepository.findByEmail(email).orElseThrow();
         return this.modelMapper.map(user, User.class);
+    }
+
+    public void delete(String email) {
+        UserEntity user = this.userRepository.findByEmail(email).orElseThrow();
+        this.userRepository.delete(user);
     }
 }

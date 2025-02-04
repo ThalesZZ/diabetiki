@@ -26,4 +26,10 @@ public class UserController {
         return ResponseEntity.noContent().build(); // TODO
     }
 
+    @DeleteMapping("/{email}")
+    public ResponseEntity<Object> delete(@PathVariable("email") String email){
+        this.userService.delete(email);
+        return ResponseEntity.noContent().build();
+    }
+
 }
