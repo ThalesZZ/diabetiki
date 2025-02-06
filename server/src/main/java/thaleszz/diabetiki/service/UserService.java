@@ -15,21 +15,18 @@ public class UserService {
 
     public User create(User user) {
         UserEntity model = this.userMapper.toModel(user);
-        // TODO validate before persist
         UserEntity saved = this.userRepository.save(model);
         return this.userMapper.toDomain(saved);
     }
 
-    public User update(String email, User user) {
-        UserEntity current = this.userRepository.findByEmail(email).orElseThrow();
+    public User update(String email, User data) {
+        UserEntity user = this.userRepository.findByEmail(email).orElseThrow();
 
         // TODO find a better way to map the updates
-        current.setName(user.getName());
-        current.setEmail(user.getEmail());
+        user.setName(data.getName());
+        user.setEmail(data.getEmail());
 
-        UserEntity model = this.userMapper.toModel(current, user);
-
-        // TODO validate before persist
+        UserEntity model = this.userMapper.toModel(user, data);
         UserEntity saved = this.userRepository.save(model);
         return this.userMapper.toDomain(saved);
     }

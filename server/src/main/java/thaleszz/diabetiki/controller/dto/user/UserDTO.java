@@ -1,11 +1,10 @@
-package thaleszz.diabetiki.controller.dto;
+package thaleszz.diabetiki.controller.dto.user;
 
-import jakarta.validation.constraints.NotBlank;
 import thaleszz.diabetiki.domain.User;
 
 public record UserDTO(
-        @NotBlank String name,
-        @NotBlank String email
+        String name,
+        String email
 ) {
     public UserDTO(User user) {
         this(user.getName(), user.getEmail());

@@ -1,9 +1,9 @@
-package thaleszz.diabetiki.controller.dto;
+package thaleszz.diabetiki.controller.dto.user;
 
 import jakarta.validation.constraints.*;
+import thaleszz.diabetiki.controller.dto.thresholds.ThresholdsDTO;
 import thaleszz.diabetiki.domain.HealthProfile;
 import thaleszz.diabetiki.domain.SensitivityProfile;
-import thaleszz.diabetiki.domain.Thresholds;
 import thaleszz.diabetiki.domain.User;
 
 import java.util.Collections;
@@ -13,7 +13,7 @@ public record CreateUserDTO(
         @NotBlank String name,
         @NotBlank @Email String email,
         // TODO internal validations not working
-        @NotNull InitialThresholds thresholds,
+        @NotNull ThresholdsDTO thresholds,
         @NotNull InitialHealthProfile healthProfile,
         @NotNull InitialSensitivityProfile sensitivityProfile
 ) {
@@ -35,31 +35,6 @@ public record CreateUserDTO(
                 Collections.singletonList(this.sensitivityProfile.toDomain()),
                 Collections.singletonList(this.healthProfile.toDomain())
         );
-    }
-
-    public record InitialThresholds(
-            @PositiveOrZero int hypoglycemiaThreshold,
-            @PositiveOrZero int hyperglycemiaThreshold,
-            @PositiveOrZero int superHypoglycemiaThreshold,
-            @PositiveOrZero int superHyperglycemiaThreshold
-    ) {
-        public InitialThresholds {
-            boolean isChained = superHypoglycemiaThreshold <= hypoglycemiaThreshold
-                    && hypoglycemiaThreshold < hyperglycemiaThreshold
-                    && hyperglycemiaThreshold <= superHyperglycemiaThreshold;
-            if (!isChained)
-                throw new IllegalArgumentException(); // TODO message
-        }
-
-        public Thresholds toDomain() {
-            return new Thresholds(
-                    null,
-                    this.hypoglycemiaThreshold,
-                    this.hyperglycemiaThreshold,
-                    this.superHypoglycemiaThreshold,
-                    this.superHyperglycemiaThreshold
-            );
-        }
     }
 
     public record InitialHealthProfile(

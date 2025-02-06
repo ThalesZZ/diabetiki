@@ -1,4 +1,4 @@
-package thaleszz.diabetiki.controller.dto;
+package thaleszz.diabetiki.controller.dto.user;
 
 import jakarta.validation.constraints.NotBlank;
 import thaleszz.diabetiki.domain.User;
