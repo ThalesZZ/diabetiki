@@ -1,14 +1,18 @@
 package thaleszz.diabetiki.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
 @Data
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class User {
-    private UUID uuid;
+    private final UUID uuid;
     private String name;
     private String email;
     private Thresholds thresholds;
