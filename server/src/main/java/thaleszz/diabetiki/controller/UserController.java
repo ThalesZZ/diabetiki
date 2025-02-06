@@ -18,14 +18,15 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserDTO> create(@RequestBody CreateUserDTO data) {
         User user = this.userService.create(data.toDomain());
-        UserDTO dto = new UserDTO(user.getName(), user.getEmail());
+        UserDTO dto = new UserDTO(user);
         return ResponseEntity.ok(dto);
     }
 
     @GetMapping("/{email}")
-    public ResponseEntity<Object> get(@PathVariable("email") String email) {
+    public ResponseEntity<UserDTO> get(@PathVariable("email") String email) {
         User user = this.userService.find(email);
-        return ResponseEntity.noContent().build(); // TODO
+        UserDTO dto = new UserDTO(user);
+        return ResponseEntity.ok(dto);
     }
 
     @DeleteMapping("/{email}")
