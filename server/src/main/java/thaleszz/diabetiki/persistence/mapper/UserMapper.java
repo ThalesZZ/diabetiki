@@ -30,28 +30,38 @@ public class UserMapper implements EntityMapper<User, UserEntity> {
     @Override
     public UserEntity toModel(UserEntity model, User domain) {
 //        model.setUuid(domain.getUuid());
-        model.setName(domain.getName());
-        model.setEmail(domain.getEmail());
 
-        ThresholdsEntity thresholdsModel = this.thresholdsMapper.toModel(domain.getThresholds());
-        thresholdsModel.setUser(model);
-        model.setThresholds(thresholdsModel);
+        if (domain.getName() != null && !domain.getName().isBlank())
+            model.setName(domain.getName());
 
-        List<HealthProfileEntity> healthProfileModels = domain.getHealthProfiles()
-                .stream().map(d -> {
-                    HealthProfileEntity healthProfileModel = this.healthProfileMapper.toModel(d);
-                    healthProfileModel.setUser(model);
-                    return healthProfileModel;
-                }).toList();
-        model.setHealthProfiles(healthProfileModels);
+        if (domain.getEmail() != null && !domain.getEmail().isBlank())
+            model.setEmail(domain.getEmail());
 
-        List<SensitivityProfileEntity> sensitivityProfileModels = domain.getSensitivityProfiles()
-                .stream().map(d -> {
-                    SensitivityProfileEntity sensitivityProfileModel = this.sensitivityProfileMapper.toModel(d);
-                    sensitivityProfileModel.setUser(model);
-                    return sensitivityProfileModel;
-                }).toList();
-        model.setSensitivityProfiles(sensitivityProfileModels);
+        if (domain.getThresholds() != null) {
+            ThresholdsEntity thresholdsModel = this.thresholdsMapper.toModel(domain.getThresholds());
+            thresholdsModel.setUser(model);
+            model.setThresholds(thresholdsModel);
+        }
+
+        if (domain.getHealthProfiles() != null) {
+            List<HealthProfileEntity> healthProfileModels = domain.getHealthProfiles()
+                    .stream().map(d -> {
+                        HealthProfileEntity healthProfileModel = this.healthProfileMapper.toModel(d);
+                        healthProfileModel.setUser(model);
+                        return healthProfileModel;
+                    }).toList();
+            model.setHealthProfiles(healthProfileModels);
+        }
+
+        if (domain.getSensitivityProfiles() != null) {
+            List<SensitivityProfileEntity> sensitivityProfileModels = domain.getSensitivityProfiles()
+                    .stream().map(d -> {
+                        SensitivityProfileEntity sensitivityProfileModel = this.sensitivityProfileMapper.toModel(d);
+                        sensitivityProfileModel.setUser(model);
+                        return sensitivityProfileModel;
+                    }).toList();
+            model.setSensitivityProfiles(sensitivityProfileModels);
+        }
 
         return model;
     }

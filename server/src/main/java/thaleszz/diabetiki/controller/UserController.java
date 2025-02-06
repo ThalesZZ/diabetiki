@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import thaleszz.diabetiki.controller.dto.CreateUserDTO;
+import thaleszz.diabetiki.controller.dto.UpdateUserDTO;
 import thaleszz.diabetiki.controller.dto.UserDTO;
 import thaleszz.diabetiki.domain.User;
 import thaleszz.diabetiki.service.UserService;
@@ -17,7 +18,17 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserDTO> create(@RequestBody CreateUserDTO data) {
-        User user = this.userService.create(data.toDomain());
+        User domain = data.toDomain();
+        User user = this.userService.create(domain);
+        UserDTO dto = new UserDTO(user);
+        return ResponseEntity.ok(dto);
+    }
+
+    @PutMapping("/{email}")
+    ResponseEntity<UserDTO> update(@PathVariable("email") String email,
+                                   @RequestBody UpdateUserDTO data) {
+        User domain = data.toDomain();
+        User user = this.userService.update(email, domain);
         UserDTO dto = new UserDTO(user);
         return ResponseEntity.ok(dto);
     }

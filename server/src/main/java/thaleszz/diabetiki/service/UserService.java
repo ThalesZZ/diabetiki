@@ -20,6 +20,20 @@ public class UserService {
         return this.userMapper.toDomain(saved);
     }
 
+    public User update(String email, User user) {
+        UserEntity current = this.userRepository.findByEmail(email).orElseThrow();
+
+        // TODO find a better way to map the updates
+        current.setName(user.getName());
+        current.setEmail(user.getEmail());
+
+        UserEntity model = this.userMapper.toModel(current, user);
+
+        // TODO validate before persist
+        UserEntity saved = this.userRepository.save(model);
+        return this.userMapper.toDomain(saved);
+    }
+
     public User find(String email) {
         UserEntity user = this.userRepository.findByEmail(email).orElseThrow();
         return this.userMapper.toDomain(user);
