@@ -1,1 +1,7 @@
-node_modules
+target/
+*.class
+
+*.log
+
+*.jar
+*.war
