@@ -1,13 +1,14 @@
 package thaleszz.diabetiki.controller.dto.user;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import thaleszz.diabetiki.controller.dto.health_profile.CreateHealthProfileDTO;
+import thaleszz.diabetiki.controller.dto.sensitivity_profile.CreateSensitivityProfileDTO;
 import thaleszz.diabetiki.controller.dto.thresholds.CreateThresholdsDTO;
-import thaleszz.diabetiki.domain.SensitivityProfile;
 import thaleszz.diabetiki.domain.User;
 
 import java.util.Collections;
-import java.util.Date;
 
 public record CreateUserDTO(
         @NotBlank String name,
@@ -15,7 +16,7 @@ public record CreateUserDTO(
         // TODO internal validations not working
         @NotNull CreateThresholdsDTO thresholds,
         @NotNull CreateHealthProfileDTO healthProfile,
-        @NotNull InitialSensitivityProfile sensitivityProfile
+        @NotNull CreateSensitivityProfileDTO sensitivityProfile
 ) {
     public CreateUserDTO {
         if (thresholds == null)
@@ -35,22 +36,5 @@ public record CreateUserDTO(
                 Collections.singletonList(this.sensitivityProfile.toDomain()),
                 Collections.singletonList(this.healthProfile.toDomain())
         );
-    }
-
-    public record InitialSensitivityProfile(
-            @PastOrPresent Date date,
-            @Positive int targetBloodGlucose,
-            @Positive float bloodGlucoseSensitivity,
-            @Positive float carbohydrateSensitivity
-    ) {
-        public SensitivityProfile toDomain() {
-            return new SensitivityProfile(
-                    null,
-                    this.date,
-                    this.targetBloodGlucose,
-                    this.bloodGlucoseSensitivity,
-                    this.carbohydrateSensitivity
-            );
-        }
     }
 }

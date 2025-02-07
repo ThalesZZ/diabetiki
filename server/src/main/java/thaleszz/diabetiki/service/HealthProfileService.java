@@ -29,7 +29,6 @@ public class HealthProfileService {
         HealthProfileEntity healthProfile = this.healthProfileRepository.findById(uuid).orElseThrow();
         HealthProfileEntity model = this.healthProfileMapper.toModel(healthProfile, data);
         HealthProfileEntity saved = this.healthProfileRepository.save(model);
-
         return this.healthProfileMapper.toDomain(saved);
     }
 

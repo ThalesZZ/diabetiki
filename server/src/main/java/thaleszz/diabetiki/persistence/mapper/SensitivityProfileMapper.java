@@ -15,7 +15,10 @@ public class SensitivityProfileMapper implements EntityMapper<SensitivityProfile
     @Override
     public SensitivityProfileEntity toModel(SensitivityProfileEntity model, SensitivityProfile domain) {
 //        model.setUuid(domain.getUuid());
-        model.setDate(domain.getDate());
+
+        if (domain.getDate() != null)
+            model.setDate(domain.getDate());
+
         model.setTargetBloodGlucose(domain.getTargetBloodGlucose());
         model.setCarbohydrateSensitivity(domain.getCarbohydrateSensitivity());
         model.setBloodGlucoseSensitivity(domain.getBloodGlucoseSensitivity());
