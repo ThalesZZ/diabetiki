@@ -3,7 +3,7 @@ package thaleszz.diabetiki.controller.dto.health_profile;
 import jakarta.validation.constraints.Positive;
 import thaleszz.diabetiki.domain.HealthProfile;
 
-public record UpdateHealthProfile(
+public record UpdateHealthProfileDTO(
         @Positive float weight,
         @Positive float height
 ) {

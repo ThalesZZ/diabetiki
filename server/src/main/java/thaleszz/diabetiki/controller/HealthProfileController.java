@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import thaleszz.diabetiki.controller.dto.health_profile.CreateHealthProfileDTO;
 import thaleszz.diabetiki.controller.dto.health_profile.HealthProfileDTO;
-import thaleszz.diabetiki.controller.dto.health_profile.UpdateHealthProfile;
+import thaleszz.diabetiki.controller.dto.health_profile.UpdateHealthProfileDTO;
 import thaleszz.diabetiki.domain.HealthProfile;
 import thaleszz.diabetiki.service.HealthProfileService;
 
@@ -27,7 +27,7 @@ public class HealthProfileController {
 
     @PutMapping("/{id}")
     ResponseEntity<HealthProfileDTO> update(@PathVariable("id") UUID uuid,
-                                            @RequestBody UpdateHealthProfile data) {
+                                            @RequestBody UpdateHealthProfileDTO data) {
         HealthProfile domain = data.toDomain();
         HealthProfile healthProfile = this.healthProfileService.update(uuid, domain);
         HealthProfileDTO dto = new HealthProfileDTO(healthProfile);

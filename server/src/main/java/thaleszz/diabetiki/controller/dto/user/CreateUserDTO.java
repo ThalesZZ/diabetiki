@@ -2,7 +2,7 @@ package thaleszz.diabetiki.controller.dto.user;
 
 import jakarta.validation.constraints.*;
 import thaleszz.diabetiki.controller.dto.health_profile.CreateHealthProfileDTO;
-import thaleszz.diabetiki.controller.dto.thresholds.ThresholdsDTO;
+import thaleszz.diabetiki.controller.dto.thresholds.CreateThresholdsDTO;
 import thaleszz.diabetiki.domain.SensitivityProfile;
 import thaleszz.diabetiki.domain.User;
 
@@ -13,7 +13,7 @@ public record CreateUserDTO(
         @NotBlank String name,
         @NotBlank @Email String email,
         // TODO internal validations not working
-        @NotNull ThresholdsDTO thresholds,
+        @NotNull CreateThresholdsDTO thresholds,
         @NotNull CreateHealthProfileDTO healthProfile,
         @NotNull InitialSensitivityProfile sensitivityProfile
 ) {

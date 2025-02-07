@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import thaleszz.diabetiki.controller.dto.thresholds.ThresholdsDTO;
+import thaleszz.diabetiki.controller.dto.thresholds.UpdateThresholdsDTO;
 import thaleszz.diabetiki.domain.Thresholds;
 import thaleszz.diabetiki.service.ThresholdsService;
 
@@ -15,7 +16,7 @@ public class ThresholdsController {
 
     @PutMapping("/{email}")
     ResponseEntity<ThresholdsDTO> update(@PathVariable("email") String email,
-                                         @RequestBody ThresholdsDTO data) {
+                                         @RequestBody UpdateThresholdsDTO data) {
         Thresholds domain = data.toDomain();
         Thresholds thresholds = this.thresholdsService.update(email, domain);
         ThresholdsDTO dto = new ThresholdsDTO(thresholds);
