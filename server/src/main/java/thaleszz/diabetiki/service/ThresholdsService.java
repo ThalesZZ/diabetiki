@@ -13,17 +13,11 @@ public class ThresholdsService {
     private final ThresholdsRepository thresholdsRepository;
     private final ThresholdsMapper thresholdsMapper;
 
-    public Thresholds update(String email, Thresholds data) {
-        ThresholdsEntity thresholds = this.thresholdsRepository.findByUserEmail(email).orElseThrow();
-
-        // TODO find a better way to map the updates
-        thresholds.setHypoglycemiaThreshold(data.getHypoglycemiaThreshold());
-        thresholds.setHyperglycemiaThreshold(data.getHyperglycemiaThreshold());
-        thresholds.setSuperHypoglycemiaThreshold(data.getSuperHypoglycemiaThreshold());
-        thresholds.setSuperHyperglycemiaThreshold(data.getSuperHyperglycemiaThreshold());
-
+    public Thresholds update(String userEmail, Thresholds data) {
+        ThresholdsEntity thresholds = this.thresholdsRepository.findByUserEmail(userEmail).orElseThrow();
         ThresholdsEntity model = this.thresholdsMapper.toModel(thresholds, data);
         ThresholdsEntity saved = this.thresholdsRepository.save(model);
+
         return this.thresholdsMapper.toDomain(saved);
     }
 }

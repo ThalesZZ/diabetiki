@@ -15,9 +15,15 @@ public class HealthProfileMapper implements EntityMapper<HealthProfile, HealthPr
     @Override
     public HealthProfileEntity toModel(HealthProfileEntity model, HealthProfile domain) {
 //        model.setUuid(domain.getUuid());
-        model.setDate(domain.getDate());
-        model.setWeight(domain.getWeight());
-        model.setHeight(domain.getHeight());
+
+        if (domain.getDate() != null)
+            model.setDate(domain.getDate());
+
+        if (domain.getWeight() != null)
+            model.setWeight(domain.getWeight());
+
+        if (domain.getHeight() != null)
+            model.setHeight(domain.getHeight());
 
         return model;
     }

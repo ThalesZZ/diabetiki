@@ -13,21 +13,17 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-    public User create(User user) {
-        UserEntity model = this.userMapper.toModel(user);
+    public User create(User data) {
+        UserEntity model = this.userMapper.toModel(data);
         UserEntity saved = this.userRepository.save(model);
         return this.userMapper.toDomain(saved);
     }
 
     public User update(String email, User data) {
         UserEntity user = this.userRepository.findByEmail(email).orElseThrow();
-
-        // TODO find a better way to map the updates
-        user.setName(data.getName());
-        user.setEmail(data.getEmail());
-
         UserEntity model = this.userMapper.toModel(user, data);
         UserEntity saved = this.userRepository.save(model);
+
         return this.userMapper.toDomain(saved);
     }
 

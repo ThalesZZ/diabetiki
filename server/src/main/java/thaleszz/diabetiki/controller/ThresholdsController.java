@@ -11,7 +11,6 @@ import thaleszz.diabetiki.service.ThresholdsService;
 @RequestMapping("/thresholds")
 @AllArgsConstructor
 public class ThresholdsController {
-
     private final ThresholdsService thresholdsService;
 
     @PutMapping("/{email}")

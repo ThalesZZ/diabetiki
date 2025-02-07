@@ -13,7 +13,6 @@ import thaleszz.diabetiki.service.UserService;
 @RequestMapping("/user")
 @AllArgsConstructor
 public class UserController {
-
     private final UserService userService;
 
     @PostMapping

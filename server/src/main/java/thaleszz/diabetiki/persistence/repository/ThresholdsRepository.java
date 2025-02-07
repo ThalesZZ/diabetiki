@@ -9,5 +9,5 @@ import java.util.UUID;
 
 @Repository
 public interface ThresholdsRepository extends JpaRepository<ThresholdsEntity, UUID> {
-    Optional<ThresholdsEntity> findByUserEmail(String email);
+    Optional<ThresholdsEntity> findByUserEmail(String userEmail);
 }
